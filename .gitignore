@@ -18,10 +18,6 @@
 .glide/
 
 # Dependency directories (remove the comment below to include it)
-<<<<<<< HEAD
 # vendor/
 
 data/
-=======
-# vendor/
->>>>>>> c4dad65 (Initial commit)
