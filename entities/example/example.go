@@ -4,6 +4,6 @@ import "gorm.io/gorm"
 
 type Example struct {
 	gorm.Model
-	ExampleId   int    `json:"example_id"`
-	ExampleName string `json:"example_name"`
+	ExampleId   int    `json:"ExampleId" validate:"required"`
+	ExampleName string `json:"ExampleName" validate:"min=1,max=12"`
 }
