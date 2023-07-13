@@ -1,12 +1,16 @@
 package examples
 
 import (
-	"air-line-reservation-backend/models/example"
+	"air-line-reservation-backend/dbs"
+	"air-line-reservation-backend/entities/example"
+
 	"sync"
+
+	"gorm.io/gorm"
 )
 
 type ExampleService struct {
-	// Database instance goes here
+	db *gorm.DB
 }
 
 var exampleService *ExampleService
@@ -18,24 +22,31 @@ func GetService() *ExampleService {
 }
 
 func initService() {
-	exampleService = NewExampleService()
+	db := dbs.GetDB()
+	exampleService = NewExampleService(db)
 }
 
-func NewExampleService() *ExampleService {
-	return &ExampleService{}
+func NewExampleService(db *gorm.DB) *ExampleService {
+	return &ExampleService{
+		db: db,
+	}
 }
 
-func (dl *ExampleService) GetAllExamples() ([]example.ExampleModel, error) {
-	// var examples []example.ExampleModel
-	result := []example.ExampleModel{
-		{ExampleId: 1, ExampleName: "Example 1"},
-		{ExampleId: 2, ExampleName: "Example 2"},
-		{ExampleId: 3, ExampleName: "Example 3"},
+func (dl *ExampleService) GetAllExamples() ([]example.Example, error) {
+	var examples []example.Example
+	result := dl.db.Find(&examples)
+
+	if result.Error != nil {
+		return nil, result.Error
 	}
 
-	if result == nil {
-		return nil, nil
-	}
+	return examples, nil
+}
 
-	return result, nil
+func (dl *ExampleService) CreateExample(example *example.Example) error {
+	result := dl.db.Create(example)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
 }
