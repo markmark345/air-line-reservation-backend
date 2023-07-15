@@ -17,3 +17,4 @@ miagratedown:
 
 sqlc:
 	sqlc generate
+	
