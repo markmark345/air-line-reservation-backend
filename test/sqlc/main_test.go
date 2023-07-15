@@ -17,7 +17,7 @@ const DBSource = "postgresql://root:password@localhost:5050/db_air_line_reservat
 
 var testQueries *db.Queries
 
-func TestDB(m *testing.M) {
+func TestMain(m *testing.M) {
 	connPool, err := pgxpool.New(context.Background(), DBSource)
 
 	if err != nil {

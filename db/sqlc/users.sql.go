@@ -7,17 +7,57 @@ package sqlc
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
-const createUser = `-- name: CreateUser :exec
+const createUser = `-- name: CreateUser :one
 INSERT INTO "users" (
     email, "password", phone, region, gender, title, first_name, last_name, age
 ) VALUES (
-    'user01@gmail.com', 'password', '1234567890', 'thai', 'M', 'Mr.', 'testf', 'testl', 24
+    $1, $2, $3, $4, $5, $6, $7, $8, $9
 )
+RETURNING user_id, email, password, phone, region, gender, title, first_name, last_name, create_at, update_at, age
 `
 
-func (q *Queries) CreateUser(ctx context.Context) error {
-	_, err := q.db.Exec(ctx, createUser)
-	return err
+type CreateUserParams struct {
+	Email     string      `json:"email"`
+	Password  string      `json:"password"`
+	Phone     pgtype.Text `json:"phone"`
+	Region    pgtype.Text `json:"region"`
+	Gender    NullGender  `json:"gender"`
+	Title     string      `json:"title"`
+	FirstName string      `json:"first_name"`
+	LastName  string      `json:"last_name"`
+	Age       pgtype.Int2 `json:"age"`
+}
+
+func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
+	row := q.db.QueryRow(ctx, createUser,
+		arg.Email,
+		arg.Password,
+		arg.Phone,
+		arg.Region,
+		arg.Gender,
+		arg.Title,
+		arg.FirstName,
+		arg.LastName,
+		arg.Age,
+	)
+	var i User
+	err := row.Scan(
+		&i.UserID,
+		&i.Email,
+		&i.Password,
+		&i.Phone,
+		&i.Region,
+		&i.Gender,
+		&i.Title,
+		&i.FirstName,
+		&i.LastName,
+		&i.CreateAt,
+		&i.UpdateAt,
+		&i.Age,
+	)
+	return i, err
 }
