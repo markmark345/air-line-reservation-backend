@@ -61,3 +61,42 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	)
 	return i, err
 }
+
+const deleteUser = `-- name: DeleteUser :exec
+DELETE FROM "users" WHERE user_id = $1::uuid
+`
+
+func (q *Queries) DeleteUser(ctx context.Context, dollar_1 pgtype.UUID) error {
+	_, err := q.db.Exec(ctx, deleteUser, dollar_1)
+	return err
+}
+
+const getUsers = `-- name: GetUsers :one
+SELECT user_id, email, password, phone, region, gender, title, first_name, last_name, create_at, update_at, age FROM "users"
+WHERE email = $1 AND password = $2
+`
+
+type GetUsersParams struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+func (q *Queries) GetUsers(ctx context.Context, arg GetUsersParams) (User, error) {
+	row := q.db.QueryRow(ctx, getUsers, arg.Email, arg.Password)
+	var i User
+	err := row.Scan(
+		&i.UserID,
+		&i.Email,
+		&i.Password,
+		&i.Phone,
+		&i.Region,
+		&i.Gender,
+		&i.Title,
+		&i.FirstName,
+		&i.LastName,
+		&i.CreateAt,
+		&i.UpdateAt,
+		&i.Age,
+	)
+	return i, err
+}

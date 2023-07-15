@@ -6,4 +6,9 @@ INSERT INTO "users" (
 )
 RETURNING *;
 
--- 'user01@gmail.com', 'password', '1234567890', 'thai', 'M', 'Mr.', 'testf', 'testl', 24
+-- name: GetUsers :one
+SELECT * FROM "users"
+WHERE email = $1 AND password = $2;
+
+-- name: DeleteUser :exec
+DELETE FROM "users" WHERE user_id = $1::uuid;

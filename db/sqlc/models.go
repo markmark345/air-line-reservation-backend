@@ -62,7 +62,7 @@ type Role struct {
 }
 
 type User struct {
-	UserID    uuid.UUID          `json:"user_id"`
+	UserID    pgtype.UUID        `json:"user_id"`
 	Email     string             `json:"email"`
 	Password  string             `json:"password"`
 	Phone     pgtype.Text        `json:"phone"`
@@ -78,14 +78,14 @@ type User struct {
 
 type UserAddress struct {
 	AddressID int32              `json:"address_id"`
-	UserID    pgtype.UUID        `json:"user_id"`
+	UserID    uuid.UUID          `json:"user_id"`
 	Address   pgtype.Text        `json:"address"`
 	CreateAt  pgtype.Timestamptz `json:"create_at"`
 	UpdateAt  pgtype.Timestamptz `json:"update_at"`
 }
 
 type UserRole struct {
-	UserID          uuid.UUID          `json:"user_id"`
+	UserID          pgtype.UUID        `json:"user_id"`
 	Role            int32              `json:"role"`
 	RoleDescription pgtype.Text        `json:"role_description"`
 	CreateAt        pgtype.Timestamptz `json:"create_at"`

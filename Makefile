@@ -1,4 +1,4 @@
-.PHONY: postgres createdb dropdb miagrateup miagratedown sqlc
+.PHONY: postgres createdb dropdb miagrateup miagratedown sqlc test
 
 postgres:
 	docker run --name air-line-reservation-backend-postgresql-1 -p 5050:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=password -d postgres:15-alpine
@@ -17,4 +17,7 @@ miagratedown:
 
 sqlc:
 	sqlc generate
+
+test:
+	go test -v -cover ./test/...
 	
