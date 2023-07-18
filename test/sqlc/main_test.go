@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	db "air-line-reservation-backend/db/sqlc"
+	db "air-line-reservation-backend/internal/infrastucture/postgres"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 

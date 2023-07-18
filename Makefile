@@ -1,5 +1,10 @@
 .PHONY: postgres createdb dropdb miagrateup miagratedown sqlc test
 
+inti:
+	go install golang.org/x/tools/cmd/cover@latest
+	go install github.com/kyleconroy/sqlc/cmd/sqlc@latest
+	go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+
 postgres:
 	docker run --name air-line-reservation-backend-postgresql-1 -p 5050:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=password -d postgres:15-alpine
 
@@ -17,7 +22,11 @@ miagratedown:
 
 sqlc:
 	sqlc generate
+	go run ./lib/changDirSqlc.go
+	go mod tidy
 
 test:
-	go test -v -cover ./test/...
+	go test ./test/... -coverpkg=./... -coverprofile=./coverage/coverage.out 
+	go tool cover -func=./coverage/coverage.out 
+	go tool cover -html=./coverage/coverage.out -o ./coverage/coverage.html
 	

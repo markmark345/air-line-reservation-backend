@@ -5,36 +5,27 @@ import (
 	"strconv"
 	"testing"
 
-	db "air-line-reservation-backend/db/sqlc"
 	"air-line-reservation-backend/internal/domain/utils"
+	"air-line-reservation-backend/internal/infrastucture/postgres"
+	"air-line-reservation-backend/internal/infrastucture/postgres/model"
 
 	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/stretchr/testify/require"
 )
 
-var arg = db.CreateUserParams {
+var arg = postgres.CreateUserParams {
 	Email:     utils.RandomEmail(),
 	Password:  utils.RandomString(8),
 	Phone:     pgtype.Text{String: strconv.FormatInt(utils.RandomInt(1000000000, 9999999999), 10), Valid: true},
 	Region:    pgtype.Text{String: utils.RandomString(5), Valid: true},
-	Gender:    db.NullGender{Gender: db.Gender(utils.RandomGender()), Valid: true},
+	Gender:    model.NullGender{Gender: model.Gender(utils.RandomGender()), Valid: true},
 	Title:     utils.RandomString(3),
 	FirstName: utils.RandomString(10),
 	LastName:  utils.RandomString(10),
 	Age:       pgtype.Int2{Int16: int16(utils.RandomInt(0, 100)), Valid: true},
 }
 
-var userParams = db.User {
-	Email:     arg.Email,
-	Password:  arg.Password,
-	Phone:     arg.Phone,
-	Region:    arg.Region,
-	Gender:    arg.Gender,
-	Title:     arg.Title,
-	FirstName: arg.FirstName,
-	LastName:  arg.LastName,
-	Age:       arg.Age,
-}
+var uid pgtype.UUID
 
 func TestCreateUser(t *testing.T) {
 	user, err := testQueries.CreateUser(context.Background(), arg)
@@ -59,18 +50,23 @@ func TestCreateUser(t *testing.T) {
 
 
 func TestGetUser(t *testing.T) {
-	params := db.GetUsersParams {
+	params := postgres.GetUsersParams {
 		Email: arg.Email,
 		Password: arg.Password,
 	}
 
 	user, err := testQueries.GetUsers(context.Background(), params)
 
-	userParams := db.User{
+	userParams := model.User{
 		UserID: user.UserID,
 		CreateAt: user.CreateAt,
 		UpdateAt: user.UpdateAt,
 	}
+
+	uid = pgtype.UUID{
+        Bytes: user.UserID.Bytes,
+        Valid: true,
+    }
 
 	require.NoError(t, err)
 	require.NotEmpty(t, user)
@@ -90,21 +86,15 @@ func TestGetUser(t *testing.T) {
 }
 
 func TestDeleteUser(t *testing.T) {
-	uid := pgtype.UUID{Bytes: userParams.UserID.Bytes, Valid: true}
-	// fmt.Println("uid", uid.String())
+	err2 := testQueries.DeleteUser(context.Background(), uid)
+	require.NoError(t, err2)
 
-	err := testQueries.DeleteUser(context.Background(), uid)
-	// fmt.Println("aaaa", err)
-	require.NoError(t, err)
+	getUser := postgres.GetUsersParams {
+		Email: arg.Email,
+		Password: arg.Password,
+	}
 
-	// getUser := db.GetUsersParams {
-	// 	Email: arg.Email,
-	// 	Password: arg.Password,
-	// }
-
-	// user2, err := testQueries.GetUsers(context.Background(), getUser)
-	// fmt.Println("ssss",user)
-	// require.Error(t, err)
-	// require.Empty(t, user)
-	// require.Nil(t, user)
+	user, err := testQueries.GetUsers(context.Background(), getUser)
+	require.Error(t, err)
+	require.Empty(t, user)
 }
