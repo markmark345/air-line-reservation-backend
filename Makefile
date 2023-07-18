@@ -23,6 +23,7 @@ miagratedown:
 sqlc:
 	sqlc generate
 	go run ./lib/changDirSqlc.go
+	rm -rf ./db/sqlc
 	go mod tidy
 
 test:
