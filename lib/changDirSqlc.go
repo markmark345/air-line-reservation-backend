@@ -46,7 +46,7 @@ func addImportAndFixPackage(fileName string, filePath string) {
 		}
 
 		if strings.Compare(lineWithOutSpace, "\"context\"") == 0 && !(fileName == "models.go" || fileName == "db.go")  {
-			line += "\n\n" + "	" + newImport
+			line += "\n" + "	" + newImport + "\n"
 		}
 
 		result += line

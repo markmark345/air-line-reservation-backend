@@ -7,8 +7,8 @@ package postgres
 import (
 	"context"
 
-
 	. "air-line-reservation-backend/internal/infrastucture/postgres/model"
+
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
