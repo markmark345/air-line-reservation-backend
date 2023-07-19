@@ -42,10 +42,7 @@ jobs:
 
       - name: Install golang-migrate
         run: |
-          go get -u -d github.com/golang-migrate/migrate/cmd/migrate
-          cd $GOPATH/src/github.com/golang-migrate/migrate/cmd/migrate
-          git checkout $TAG
-          go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@$TAG
+          go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
 
       - name: Migrations
         run: make miagrateup
