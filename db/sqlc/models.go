@@ -2,12 +2,13 @@
 // versions:
 //   sqlc v1.19.1
 
-package model
+package sqlc
 
 import (
 	"database/sql/driver"
 	"fmt"
 
+	utils "air-line-reservation-backend/internal/domain/utils"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -60,20 +61,20 @@ type Role struct {
 	CreateAt pgtype.Timestamptz `json:"create_at"`
 }
 
-// type User struct {
-// 	UserID    pgtype.UUID        `json:"user_id"`
-// 	Email     string             `json:"email"`
-// 	Password  string             `json:"password"`
-// 	Phone     pgtype.Text        `json:"phone"`
-// 	Region    pgtype.Text        `json:"region"`
-// 	Gender    utils.NullGender   `json:"gender"`
-// 	Title     string             `json:"title"`
-// 	FirstName string             `json:"first_name"`
-// 	LastName  string             `json:"last_name"`
-// 	CreateAt  pgtype.Timestamptz `json:"create_at"`
-// 	UpdateAt  pgtype.Timestamptz `json:"update_at"`
-// 	Age       pgtype.Int2        `json:"age"`
-// }
+type User struct {
+	UserID    pgtype.UUID        `json:"user_id"`
+	Email     string             `json:"email"`
+	Password  string             `json:"password"`
+	Phone     pgtype.Text        `json:"phone"`
+	Region    pgtype.Text        `json:"region"`
+	Gender    utils.NullGender   `json:"gender"`
+	Title     string             `json:"title"`
+	FirstName string             `json:"first_name"`
+	LastName  string             `json:"last_name"`
+	CreateAt  pgtype.Timestamptz `json:"create_at"`
+	UpdateAt  pgtype.Timestamptz `json:"update_at"`
+	Age       pgtype.Int2        `json:"age"`
+}
 
 type UserAddress struct {
 	AddressID int32              `json:"address_id"`

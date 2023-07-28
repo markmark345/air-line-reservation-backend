@@ -1,0 +1,12 @@
+environment: local
+
+server:
+  port: 8080
+
+postgres:
+  db-name: db_air_line_reservation
+  host: 127.0.0.1
+  port: 5050
+  user: root
+  password: password
+  pool-size: 10

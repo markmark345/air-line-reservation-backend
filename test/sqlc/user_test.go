@@ -13,12 +13,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-var arg = postgres.CreateUserParams {
+var arg = postgres.CreateUserParams{
 	Email:     utils.RandomEmail(),
 	Password:  utils.RandomString(8),
 	Phone:     pgtype.Text{String: strconv.FormatInt(utils.RandomInt(1000000000, 9999999999), 10), Valid: true},
 	Region:    pgtype.Text{String: utils.RandomString(5), Valid: true},
-	Gender:    model.NullGender{Gender: model.Gender(utils.RandomGender()), Valid: true},
+	Gender:    utils.NullGender{Gender: utils.Gender(utils.RandomGender()), Valid: true},
 	Title:     utils.RandomString(3),
 	FirstName: utils.RandomString(10),
 	LastName:  utils.RandomString(10),
@@ -48,25 +48,24 @@ func TestCreateUser(t *testing.T) {
 	require.NotZero(t, user.UserID)
 }
 
-
 func TestGetUser(t *testing.T) {
-	params := postgres.GetUsersParams {
-		Email: arg.Email,
+	params := postgres.GetUsersParams{
+		Email:    arg.Email,
 		Password: arg.Password,
 	}
 
 	user, err := testQueries.GetUsers(context.Background(), params)
 
 	userParams := model.User{
-		UserID: user.UserID,
+		UserID:   user.UserID,
 		CreateAt: user.CreateAt,
 		UpdateAt: user.UpdateAt,
 	}
 
 	uid = pgtype.UUID{
-        Bytes: user.UserID.Bytes,
-        Valid: true,
-    }
+		Bytes: user.UserID.Bytes,
+		Valid: true,
+	}
 
 	require.NoError(t, err)
 	require.NotEmpty(t, user)
@@ -89,8 +88,8 @@ func TestDeleteUser(t *testing.T) {
 	err2 := testQueries.DeleteUser(context.Background(), uid)
 	require.NoError(t, err2)
 
-	getUser := postgres.GetUsersParams {
-		Email: arg.Email,
+	getUser := postgres.GetUsersParams{
+		Email:    arg.Email,
 		Password: arg.Password,
 	}
 

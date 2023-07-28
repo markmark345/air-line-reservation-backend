@@ -1,6 +1,8 @@
-.PHONY: postgres createdb dropdb miagrateup miagratedown sqlc test
+.PHONY: postgres createdb dropdb miagrateup miagratedown sqlc test start
 
-inti:
+init:
+	go get github.com/spf13/viper
+	go get -u github.com/gin-gonic/gin
 	go install golang.org/x/tools/cmd/cover@latest
 	go install github.com/kyleconroy/sqlc/cmd/sqlc@latest
 	go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
@@ -23,7 +25,6 @@ miagratedown:
 sqlc:
 	sqlc generate
 	go run ./lib/changDirSqlc.go
-	rm -rf ./db/sqlc
 	go mod tidy
 
 test:
@@ -31,3 +32,5 @@ test:
 	go tool cover -func=./coverage/coverage.out 
 	go tool cover -html=./coverage/coverage.out -o ./coverage/coverage.html
 	
+start:
+	go run cmd/server/main.go

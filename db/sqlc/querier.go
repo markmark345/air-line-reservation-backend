@@ -2,12 +2,10 @@
 // versions:
 //   sqlc v1.19.1
 
-package postgres
+package sqlc
 
 import (
 	"context"
-
-	. "air-line-reservation-backend/internal/infrastucture/postgres/model"
 
 	"github.com/jackc/pgx/v5/pgtype"
 )

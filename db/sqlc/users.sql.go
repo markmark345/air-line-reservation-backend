@@ -3,12 +3,10 @@
 //   sqlc v1.19.1
 // source: users.sql
 
-package postgres
+package sqlc
 
 import (
 	"context"
-
-	. "air-line-reservation-backend/internal/infrastucture/postgres/model"
 
 	utils "air-line-reservation-backend/internal/domain/utils"
 	"github.com/jackc/pgx/v5/pgtype"
