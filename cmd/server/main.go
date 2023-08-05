@@ -28,7 +28,6 @@ func main() {
 }
 
 func registerRoutes(g *gin.Engine, cfg *config.Config) error {
-	// g.GET("/testing", startPage)
 	db, err := NewDB(cfg)
 	if err != nil {
 		panic(err)
@@ -41,6 +40,7 @@ func registerRoutes(g *gin.Engine, cfg *config.Config) error {
 	v1 := g.Group("/api/v1")
 	{
 		v1.GET("/user/:id", userHandler.GetUser)
+		v1.POST("/user", userHandler.CreateUser)
 	}
 	return nil
 }

@@ -3,10 +3,10 @@ package postgres
 import (
 	"air-line-reservation-backend/internal/domain/entities"
 	"air-line-reservation-backend/internal/domain/repositories"
+	utils "air-line-reservation-backend/internal/domain/utils"
 	"air-line-reservation-backend/internal/infrastucture/postgres/model"
 	"context"
 	"errors"
-	"fmt"
 
 	"github.com/go-pg/pg/v10"
 )
@@ -29,7 +29,6 @@ func NewUserRepository(
 }
 
 func (repo *userRepository) GetUser(ctx context.Context, userId string) (*entities.User, error) {
-	// user = &entities.User{}
 	pgUser := &model.User{}
 
 	err := repo.pg.ModelContext(ctx, pgUser).Where("user_id = ?", userId).First()
@@ -42,8 +41,42 @@ func (repo *userRepository) GetUser(ctx context.Context, userId string) (*entiti
 	}
 
 	result := pgUser.ToDomain()
-	fmt.Println(result)
-	// result.UserID = userId
 
 	return result, nil
+}
+
+func (repo *userRepository) CreateUser(ctx context.Context, user *entities.User) error {
+	tx, err := repo.pg.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Close()
+
+	pgUser := &model.User{}
+	pgUser.Email = user.Email
+	pgUser.Password = user.Password
+	pgUser.Phone = user.Phone
+	pgUser.Region = user.Region
+	pgUser.Gender = utils.NullGender{Gender: utils.Gender(user.Gender), Valid: true}
+	pgUser.Title = user.Title
+	pgUser.FirstName = user.FirstName
+	pgUser.LastName = user.LastName
+	pgUser.Age = int(pgUser.Age)
+
+	_, err = repo.pg.ModelContext(ctx, pgUser).WherePK().Insert()
+
+	if err == pg.ErrNoRows {
+		tx.Rollback()
+		return errors.New("create user error")
+	}
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if err := tx.Commit(); err != nil {
+		return err
+	}
+
+	return nil
 }

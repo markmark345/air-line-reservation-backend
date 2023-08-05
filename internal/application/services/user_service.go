@@ -3,12 +3,13 @@ package services
 import (
 	"air-line-reservation-backend/internal/domain/entities"
 	"air-line-reservation-backend/internal/domain/repositories"
+	"air-line-reservation-backend/internal/domain/utils"
 	"context"
-	"fmt"
 )
 
 type UserService interface {
 	GetUser(ctx context.Context, userId string) (*entities.User, error)
+	CreateUser(ctx context.Context, user *entities.User) error
 }
 
 type userService struct {
@@ -25,10 +26,36 @@ func NewUserService(
 
 func (svc *userService) GetUser(ctx context.Context, userId string) (*entities.User, error) {
 	result, err := svc.userRepo.GetUser(ctx, userId)
-	fmt.Println("service: ", result)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return result, err
+	return &entities.User{
+		UserID:    result.UserID,
+		Email:     result.Email,
+		Phone:     result.Phone,
+		Region:    result.Region,
+		Gender:    result.Gender,
+		Title:     result.Title,
+		FirstName: result.FirstName,
+		LastName:  result.LastName,
+		Age:       result.Age,
+		CreateAt:  result.CreateAt,
+		UpdateAt:  result.UpdateAt,
+	}, err
+}
+
+func (svc *userService) CreateUser(ctx context.Context, user *entities.User) error {
+	hashPass, err := utils.HashPassword(user.Password)
+	if err != nil {
+		return err
+	}
+
+	user.Password = hashPass
+	err = svc.userRepo.CreateUser(ctx, user)
+	if err != nil {
+		return err
+	}
+
+	return err
 }

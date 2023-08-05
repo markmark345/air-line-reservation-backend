@@ -16,7 +16,7 @@ CREATE TABLE "users" (
     last_name VARCHAR(255) NOT NULL,
     create_at timestamptz NOT NULL DEFAULT (now()),
     update_at timestamptz NOT NULL DEFAULT (now()),
-    age SMALLINT
+    age SMALLINT NOT NULL
 );
 
 CREATE TABLE "roles" (
