@@ -1,11 +1,7 @@
 .PHONY: postgres createdb dropdb miagrateup miagratedown sqlc test start
 
 init:
-	go get github.com/spf13/viper
-	go get -u github.com/gin-gonic/gin
-	go install golang.org/x/tools/cmd/cover@latest
-	go install github.com/kyleconroy/sqlc/cmd/sqlc@latest
-	go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+	go mod tidy
 
 postgres:
 	docker run --name air-line-reservation-backend-postgresql-1 -p 5050:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=password -d postgres:15-alpine
@@ -21,11 +17,6 @@ miagrateup:
 
 miagratedown:
 	migrate -path db/migration -database "postgresql://root:password@localhost:5050/db_air_line_reservation?sslmode=disable" -verbose down
-
-sqlc:
-	sqlc generate
-	go run ./lib/changDirSqlc.go
-	go mod tidy
 
 test:
 	go test ./test/... -coverpkg=./... -coverprofile=./coverage/coverage.out 

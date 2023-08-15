@@ -28,11 +28,10 @@ func NewUserHandler(
 
 func (handler *UserHandler) GetUser(c *gin.Context) {
 	ctx := c.Request.Context()
-	userId := c.Param("id")
 
-	result, err := handler.userService.GetUser(ctx, userId)
+	result, err := handler.userService.GetUser(ctx)
 	if err != nil {
-		responses.Failure(c, "user_not_found", nil)
+		responses.Failure(c, "user_not_found", err)
 		return
 	}
 
@@ -62,11 +61,11 @@ func (handler *UserHandler) CreateUser(c *gin.Context) {
 
 	fmt.Println(user)
 
-	err := handler.userService.CreateUser(ctx, &user)
+	result, err := handler.userService.CreateUser(ctx, &user)
 	if err != nil {
 		responses.Error(c, err)
 		return
 	}
 
-	responses.Success(c, "created", nil)
+	responses.Success(c, "created", result)
 }

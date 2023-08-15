@@ -103,6 +103,8 @@ github.com/go-stack/stack v1.8.0/go.mod h1:v0f6uXyyMGvRgIKkXu+yp6POWl0qKG85gN/me
 github.com/goccy/go-json v0.10.2 h1:CrxCmQqYDkv1z7lO7Wbh2HN93uovUHgrECaO5ZrCXAU=
 github.com/goccy/go-json v0.10.2/go.mod h1:6MelG93GURQebXPDq3khkgXZkazVtN9CRI+MGFi0w8I=
 github.com/gofrs/uuid v4.0.0+incompatible/go.mod h1:b2aQJv3Z4Fp6yNu3cdSllBxTCLRxnplIgP/c0N/04lM=
+github.com/golang-jwt/jwt/v5 v5.0.0 h1:1n1XNM9hk7O9mnQoNBGolZvzebBQ7p93ULHRc28XJUE=
+github.com/golang-jwt/jwt/v5 v5.0.0/go.mod h1:pqrtFR0X4osieyHYxtmOUWsAWrfe1Q5UVIyoH402zdk=
 github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b/go.mod h1:SBH7ygxi8pfUlaOkMMuAQtPIUF8ecWP5IEl/CR7VP2Q=
 github.com/golang/groupcache v0.0.0-20190702054246-869f871628b6/go.mod h1:cIg4eruTrX1D+g88fzRXU5OdNfaM+9IcxsU14FzY7Hc=
 github.com/golang/groupcache v0.0.0-20191227052852-215e87163ea7/go.mod h1:cIg4eruTrX1D+g88fzRXU5OdNfaM+9IcxsU14FzY7Hc=
@@ -268,6 +270,12 @@ github.com/markmark345/air-line-v1-common v1.0.11 h1:lQqvBXPRO/lgtZDdvnXOOybQbrw
 github.com/markmark345/air-line-v1-common v1.0.11/go.mod h1:BUp4FO8+trOJXlMSXjtbIkH7FhW8UGQ1S2UqUXM1Kdc=
 github.com/markmark345/air-line-v1-common v1.0.12 h1:QmxX1n3qehVQN4yBwMtyLchJmIC2eWhKY1OIJSZKaK8=
 github.com/markmark345/air-line-v1-common v1.0.12/go.mod h1:BUp4FO8+trOJXlMSXjtbIkH7FhW8UGQ1S2UqUXM1Kdc=
+github.com/markmark345/air-line-v1-common v1.0.13 h1:sSu3DddkqHJWuFuR51gpD1moEzyetQL0WMKr5OekL7s=
+github.com/markmark345/air-line-v1-common v1.0.13/go.mod h1:VSYfBsZYYnwZo+m944iiy81B2zBhUoxoSRpfQ4Wf/Hw=
+github.com/markmark345/air-line-v1-common v1.0.14 h1:iEWhYYrPSLTUdFUKaoJs8cJoBrqHl/Z4bwDBBFCxFfw=
+github.com/markmark345/air-line-v1-common v1.0.14/go.mod h1:VSYfBsZYYnwZo+m944iiy81B2zBhUoxoSRpfQ4Wf/Hw=
+github.com/markmark345/air-line-v1-common v1.0.15 h1:/rQmgt1JgXY3nDcdK+oHM79u7fMbmMD6QAU6iXl7blc=
+github.com/markmark345/air-line-v1-common v1.0.15/go.mod h1:VSYfBsZYYnwZo+m944iiy81B2zBhUoxoSRpfQ4Wf/Hw=
 github.com/mattn/go-colorable v0.1.1/go.mod h1:FuOcm+DKB9mbwrcAfNl7/TZVBZ6rcnceauSikq3lYCQ=
 github.com/mattn/go-colorable v0.1.6/go.mod h1:u6P/XSegPjTcexA+o6vUJrdnUu04hMope9wVRipJSqc=
 github.com/mattn/go-isatty v0.0.5/go.mod h1:Iq45c/XA43vh69/j3iqttzPXn0bhXyGjM0Hdxcsrc5s=

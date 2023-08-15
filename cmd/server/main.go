@@ -9,6 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-pg/pg/v10"
+	"github.com/markmark345/air-line-v1-common/api/middlewares"
 )
 
 func main() {
@@ -34,13 +35,14 @@ func registerRoutes(g *gin.Engine, cfg *config.Config) error {
 	}
 
 	userRepo := postgres.NewUserRepository(db)
-	userService := services.NewUserService(userRepo)
+	userService := services.NewUserService(userRepo, cfg)
 	userHandler := handler.NewUserHandler(userService)
 
 	v1 := g.Group("/api/v1")
 	{
-		v1.GET("/user/:id", userHandler.GetUser)
-		v1.POST("/user", userHandler.CreateUser)
+		v1.GET("/user", userHandler.GetUser).Use(middlewares.JwtMiddleware())
+		v1.POST("/user/create", userHandler.CreateUser)
+		// v1.POST("/user/login", userHandler.Login)
 	}
 	return nil
 }

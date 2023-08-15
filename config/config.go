@@ -14,6 +14,7 @@ var config *Config
 type Config struct {
 	Server   Server   `mapstructure:"server"`
 	Postgres Postgres `mapstructure:"Postgres"`
+	Secrets  Secrets  `mapstructure:"Secrets"`
 }
 
 type Server struct {
@@ -27,6 +28,10 @@ type Postgres struct {
 	User     string `mapstructure:"user"`
 	Password string `mapstructure:"password"`
 	PoolSize int    `mapstructure:"pool-size"`
+}
+
+type Secrets struct {
+	JwtKeyAccess string `mapstructure:"jwt-key-access"`
 }
 
 func NewConfig() *Config {
@@ -46,6 +51,7 @@ func NewConfig() *Config {
 
 		viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 		if err := viper.ReadInConfig(); err != nil {
+			panic(err)
 		}
 		viper.AutomaticEnv()
 

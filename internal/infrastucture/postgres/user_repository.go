@@ -30,7 +30,6 @@ func NewUserRepository(
 
 func (repo *userRepository) GetUser(ctx context.Context, userId string) (*entities.User, error) {
 	pgUser := &model.User{}
-
 	err := repo.pg.ModelContext(ctx, pgUser).Where("user_id = ?", userId).First()
 	if err == pg.ErrNoRows {
 		return nil, errors.New("user not found")
@@ -41,7 +40,22 @@ func (repo *userRepository) GetUser(ctx context.Context, userId string) (*entiti
 	}
 
 	result := pgUser.ToDomain()
+	return result, nil
+}
 
+func (repo *userRepository) GetUserWithEmailAndPassword(ctx context.Context, email string, password string) (*entities.User, error) {
+	pgUser := &model.User{}
+
+	err := repo.pg.ModelContext(ctx, pgUser).Where("email = ?", email).Where("password = ?", password).First()
+	if err == pg.ErrNoRows {
+		return nil, errors.New("user or password not found")
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	result := pgUser.ToDomain()
 	return result, nil
 }
 
@@ -53,6 +67,7 @@ func (repo *userRepository) CreateUser(ctx context.Context, user *entities.User)
 	defer tx.Close()
 
 	pgUser := &model.User{}
+	pgUser.UserID = user.UserID
 	pgUser.Email = user.Email
 	pgUser.Password = user.Password
 	pgUser.Phone = user.Phone
@@ -62,6 +77,8 @@ func (repo *userRepository) CreateUser(ctx context.Context, user *entities.User)
 	pgUser.FirstName = user.FirstName
 	pgUser.LastName = user.LastName
 	pgUser.Age = int(pgUser.Age)
+	pgUser.CreateAt = user.CreateAt
+	pgUser.UpdateAt = user.UpdateAt
 
 	_, err = repo.pg.ModelContext(ctx, pgUser).WherePK().Insert()
 
